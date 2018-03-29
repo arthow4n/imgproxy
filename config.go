@@ -99,6 +99,8 @@ type config struct {
 
 	ETagEnabled   bool
 	ETagSignature []byte
+
+	SkipValidation bool
 }
 
 var conf = config{
@@ -151,10 +153,12 @@ func init() {
 
 	boolEnvConfig(&conf.ETagEnabled, "IMGPROXY_USE_ETAG")
 
-	if len(conf.Key) == 0 {
+	boolEnvConfig(&conf.SkipValidation, "IMGPROXY_SKIP_VALIDATION")
+
+	if !conf.SkipValidation && len(conf.Key) == 0 {
 		log.Fatalln("Key is not defined")
 	}
-	if len(conf.Salt) == 0 {
+	if !conf.SkipValidation && len(conf.Salt) == 0 {
 		log.Fatalln("Salt is not defined")
 	}
 

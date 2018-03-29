@@ -8,6 +8,9 @@ import (
 )
 
 func validatePath(token, path string) error {
+	if conf.SkipValidation {
+		return nil
+	}
 	messageMAC, err := base64.RawURLEncoding.DecodeString(token)
 	if err != nil {
 		return errors.New("Invalid token encoding")
